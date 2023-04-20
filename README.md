@@ -1,4 +1,4 @@
-# Aplicativos Android
+# APPs & Game Mobile Developer
   Flappy Bird
 
 ## Versão 1.0
