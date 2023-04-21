@@ -67,13 +67,14 @@ public class MyGdxGame extends ApplicationAdapter {
 	private final float VIRTUAL_HEIGHT = 1280;
 
 
-
+	//metodo que inicializa outros metodos quando inicia o app
 	@Override
 	public void create () {
 		inicializarTexturas();
 		inicializarObjetos();
 	}
 
+	//metodo onde vai passar o que vai ser mostrado na tela
 	@Override
 	public void render () {
 
@@ -85,7 +86,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		detectarColisoes();
 	}
 
-
+	//metodo que atribui a cada variavel uma imagem
 	public void inicializarTexturas()
 	{
 		passaros = new Texture[3];
@@ -100,6 +101,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	}
 
+	//metodo que passa as caracteristicas de tudo que vai ser utilizado no jogo
 	public void inicializarObjetos()
 	{
 		batch = new SpriteBatch();
@@ -141,6 +143,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		viewport = new StretchViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT,camera);
 	}
 
+	//verificador de estado de jogo e onde acontece a gameplay, pois, se estado =1 o personagem se mexe
 	private void verificarEstadoJogo()
 	{
 		boolean toqueTela = Gdx.input.justTouched();
@@ -190,6 +193,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		}
 	}
 
+	//metodo se ele não bateu no cano para fazer com que o jogo pare
 	private void detectarColisoes()
 	{
 		circuloPassaro.set(50+posicaoHorizontalPassaro+passaros[0].getWidth()/2,posicaoInicialVerticalPassaro+passaros[0].getWidth()/2,passaros[0].getWidth()/2);
@@ -213,6 +217,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		}
 	}
 
+	//metodo onde pega as variaveis com as imagens dentro e coloca elas na tela do jogador
 	private  void desenharTexturas()
 	{
 		batch.setProjectionMatrix(camera.combined);
@@ -232,6 +237,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		batch.end();
 	}
 
+	//metodo que verifica se o personagem ja passou do cano para aumentar a pontuação e toca o som de pontuacao
 	private void validarPontos()
 	{
 			if(posicaoCanoHorizontal<50-passaros[0].getWidth())
