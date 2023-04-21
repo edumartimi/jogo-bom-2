@@ -67,13 +67,14 @@ public class MyGdxGame extends ApplicationAdapter {
 	private final float VIRTUAL_HEIGHT = 1280;
 
 
-
+	//Metodo que chama outros metodos quando o aplicativo é aberto
 	@Override
 	public void create () {
 		inicializarTexturas();
 		inicializarObjetos();
 	}
-
+	
+	//Metodo que chama metodos de relacionamento de imagens quando o aplicativo é aberto 
 	@Override
 	public void render () {
 
@@ -85,7 +86,8 @@ public class MyGdxGame extends ApplicationAdapter {
 		detectarColisoes();
 	}
 
-
+	//metodo que atribui as imagens as suas respectivas variaveis
+	
 	public void inicializarTexturas()
 	{
 		passaros = new Texture[3];
@@ -99,7 +101,8 @@ public class MyGdxGame extends ApplicationAdapter {
 		gameOver = new Texture("game_over.png");
 
 	}
-
+	
+	//metodo que passa atributo para as variaveis que não são imagens
 	public void inicializarObjetos()
 	{
 		batch = new SpriteBatch();
@@ -141,6 +144,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		viewport = new StretchViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT,camera);
 	}
 
+	//metodo que verifica qual é o estado do jogo, e se o estado for igual a 1 ele faz com que o jogo funcione, se for igual a 2 ele faz com que o jogo pare e se a pontuação atual for maior que o record anterior ela é substituida
 	private void verificarEstadoJogo()
 	{
 		boolean toqueTela = Gdx.input.justTouched();
@@ -189,7 +193,8 @@ public class MyGdxGame extends ApplicationAdapter {
 			}
 		}
 	}
-
+	
+	//metodo que detecta se um objeto esta dentro do outro, caso esteja ele detecta a colisão muda o estado do jogo para 2
 	private void detectarColisoes()
 	{
 		circuloPassaro.set(50+posicaoHorizontalPassaro+passaros[0].getWidth()/2,posicaoInicialVerticalPassaro+passaros[0].getWidth()/2,passaros[0].getWidth()/2);
@@ -212,6 +217,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		}
 	}
+	
+	//metodo que desenha o que foi guardado nas variaveis dos metodos passados
 
 	private  void desenharTexturas()
 	{
@@ -231,6 +238,8 @@ public class MyGdxGame extends ApplicationAdapter {
 		}
 		batch.end();
 	}
+	
+	//se o player estiver na frente do cano ele adiciona 1 ponto
 
 	private void validarPontos()
 	{
@@ -251,6 +260,7 @@ public class MyGdxGame extends ApplicationAdapter {
 			}
 	}
 
+	//metodo que redimenciona o jogo para fica inteiro na tela do celular
 	@Override
 	public void resize(int width, int height)
 	{
