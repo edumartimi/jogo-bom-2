@@ -31,8 +31,16 @@ public class MyGdxGame extends ApplicationAdapter {
 	private Texture canoTopo;
 	private Texture gameOver;
 
+	private Texture moeda;
+
+	private Texture moeda2;
+
 	private ShapeRenderer shapeRenderer;
 	private Circle circuloPassaro;
+
+	private Circle batarang;
+
+	private Circle batarang2;
 	private Rectangle retanguloCanoCima;
 	private Rectangle retanguloCanoBaixo;
 
@@ -50,6 +58,19 @@ public class MyGdxGame extends ApplicationAdapter {
 	private boolean passouCano=false;
 	private int estadoJogo = 0;
 	private float posicaoHorizontalPassaro = 0;
+
+	private float posicaoMoedaHorizontal = 0;
+
+	private float posicaoMoedaHorizontal2 = 0;
+
+	private float posicaoMoedaVertical =0;
+
+	private float posicaoMoedaVertical2 =0;
+
+
+
+
+
 
 	BitmapFont textoPontuacao;
 	BitmapFont textoReiniciar;
@@ -91,14 +112,16 @@ public class MyGdxGame extends ApplicationAdapter {
 	public void inicializarTexturas()
 	{
 		passaros = new Texture[3];
-		passaros[0] = new Texture("passaro1.png");
-		passaros[1] = new Texture("passaro2.png");
-		passaros[2] = new Texture("passaro3.png");
+		passaros[0] = new Texture("bat1.png");
+		passaros[1] = new Texture("bat2.png");
+		passaros[2] = new Texture("bat3.png");
 
-		fundo = new Texture("fundo.png");
+		fundo = new Texture("fundo.jpg");
 		canoBaixo = new Texture("cano_baixo_maior.png");
 		canoTopo = new Texture("cano_topo_maior.png");
 		gameOver = new Texture("game_over.png");
+		moeda = new Texture("batarang.png");
+		moeda2 = new Texture("batarang2.png");
 
 	}
 	
@@ -112,7 +135,11 @@ public class MyGdxGame extends ApplicationAdapter {
 		alturaDispositivo = VIRTUAL_HEIGHT;
 		posicaoInicialVerticalPassaro = alturaDispositivo/2;
 		posicaoCanoHorizontal = larguraDispositivo;
+		posicaoMoedaHorizontal = larguraDispositivo;
+		posicaoMoedaHorizontal2 = larguraDispositivo;
 		espacoEntreCanos = 350;
+
+
 
 		textoPontuacao = new BitmapFont();
 		textoPontuacao.setColor(Color.WHITE);
@@ -129,6 +156,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		shapeRenderer = new ShapeRenderer();
 		circuloPassaro = new Circle();
+		batarang = new Circle();
+		batarang2 = new Circle();
 		retanguloCanoBaixo = new Rectangle();
 		retanguloCanoCima = new Rectangle();
 
@@ -163,10 +192,16 @@ public class MyGdxGame extends ApplicationAdapter {
 				somVoando.play();
 			}
 			posicaoCanoHorizontal -= Gdx.graphics.getDeltaTime() * 200;
+			posicaoMoedaHorizontal -= Gdx.graphics.getDeltaTime()*200;
+			posicaoMoedaHorizontal2 -= Gdx.graphics.getDeltaTime()*199;
 			if (posicaoCanoHorizontal< -canoTopo.getWidth())
 			{
 				posicaoCanoHorizontal = larguraDispositivo;
+				posicaoMoedaHorizontal = random.nextInt(720)+50;
+				posicaoMoedaHorizontal2 = random.nextInt(719)+51;
 				posicaoCanoVertical = random.nextInt(400) - 200 ;
+				posicaoMoedaVertical = random.nextInt(600)-300;
+				posicaoMoedaVertical2 = random.nextInt(599)-301;
 				passouCano = false;
 			}
 			if (posicaoInicialVerticalPassaro>0 || toqueTela)
@@ -199,12 +234,21 @@ public class MyGdxGame extends ApplicationAdapter {
 	{
 		circuloPassaro.set(50+posicaoHorizontalPassaro+passaros[0].getWidth()/2,posicaoInicialVerticalPassaro+passaros[0].getWidth()/2,passaros[0].getWidth()/2);
 
+		batarang.set(posicaoMoedaHorizontal,alturaDispositivo/2 + espacoEntreCanos / 2+posicaoCanoVertical,moeda.getWidth()/2);
+		batarang2.set(posicaoMoedaHorizontal2,alturaDispositivo/2 + espacoEntreCanos / 2+posicaoCanoVertical,moeda.getWidth()/2);
+
+
 		retanguloCanoBaixo.set(posicaoCanoHorizontal, alturaDispositivo/2-canoBaixo.getHeight()-espacoEntreCanos/2+posicaoCanoVertical, canoBaixo.getWidth(), canoBaixo.getHeight());
 
 		retanguloCanoCima.set(posicaoCanoHorizontal,alturaDispositivo/2+espacoEntreCanos/2+posicaoCanoVertical,canoTopo.getWidth(),canoTopo.getHeight());
 
 		boolean colidiucanocima = Intersector.overlaps(circuloPassaro, retanguloCanoCima);
 		boolean colidiucanobaixo = Intersector.overlaps(circuloPassaro, retanguloCanoBaixo);
+
+		boolean colidiumoeda = Intersector.overlaps(batarang,circuloPassaro);
+		boolean colidiumoeda2 = Intersector.overlaps(batarang2,circuloPassaro);
+
+
 
 
 		if(colidiucanocima || colidiucanobaixo)
@@ -213,7 +257,22 @@ public class MyGdxGame extends ApplicationAdapter {
 			{
 				somColisao.play();
 				estadoJogo = 2;
+
 			}
+		}
+		if(colidiumoeda)
+		{
+			somColisao.play();
+			pontos= pontos+10;
+			posicaoMoedaHorizontal -= Gdx.graphics.getDeltaTime()*559900;
+
+		}
+
+		if(colidiumoeda2)
+		{
+			somColisao.play();
+			pontos= pontos+5;
+			posicaoMoedaHorizontal2 -= Gdx.graphics.getDeltaTime()*559900;
 
 		}
 	}
@@ -225,6 +284,8 @@ public class MyGdxGame extends ApplicationAdapter {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(fundo,0,0,larguraDispositivo,alturaDispositivo);
+		batch.draw(moeda2,posicaoMoedaHorizontal2,alturaDispositivo/2 + espacoEntreCanos / 2+posicaoCanoVertical);
+		batch.draw(moeda,posicaoMoedaHorizontal,alturaDispositivo/2 + espacoEntreCanos / 2+posicaoCanoVertical);
 		batch.draw(passaros[(int)variacao],50+posicaoHorizontalPassaro,posicaoInicialVerticalPassaro);
 		batch.draw(canoBaixo,posicaoCanoHorizontal,alturaDispositivo/2 - canoBaixo.getHeight() - 	 espacoEntreCanos/2+posicaoCanoVertical);
 		batch.draw(canoTopo,posicaoCanoHorizontal,alturaDispositivo/2 + espacoEntreCanos / 2+posicaoCanoVertical);
