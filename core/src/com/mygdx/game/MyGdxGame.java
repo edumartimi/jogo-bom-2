@@ -1,16 +1,20 @@
 package com.mygdx.game;
 
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
@@ -19,12 +23,15 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.sun.java.swing.ui.SplashScreen;
+
+
 
 import java.util.Random;
 
 public class MyGdxGame extends ApplicationAdapter {
 
-	private SpriteBatch batch;
+
 	private Texture[] passaros;
 	private Texture fundo;
 	private Texture canoBaixo;
@@ -70,8 +77,6 @@ public class MyGdxGame extends ApplicationAdapter {
 
 
 
-
-
 	BitmapFont textoPontuacao;
 	BitmapFont textoReiniciar;
 	BitmapFont textoMelhorPontuacao;
@@ -88,13 +93,23 @@ public class MyGdxGame extends ApplicationAdapter {
 	private final float VIRTUAL_HEIGHT = 1280;
 
 
+	public SpriteBatch batch;
+	public Texture img;
+
+
 	//Metodo que chama outros metodos quando o aplicativo é aberto
 	@Override
 	public void create () {
 		inicializarTexturas();
 		inicializarObjetos();
+
+		// Cria um objeto SpriteBatch para desenhar a tela de splash
+		batch = new SpriteBatch();
+
+
 	}
-	
+
+
 	//Metodo que chama metodos de relacionamento de imagens quando o aplicativo é aberto 
 	@Override
 	public void render () {
@@ -189,9 +204,27 @@ public class MyGdxGame extends ApplicationAdapter {
 		{
 			if (toqueTela) {
 				gravidade = -15;
+
 				somVoando.play();
+
+				if(pontos>50)
+				{
+					gravidade=-10;
+				}
 			}
 			posicaoCanoHorizontal -= Gdx.graphics.getDeltaTime() * 200;
+			if(pontos>50)
+			{
+				posicaoCanoHorizontal -= Gdx.graphics.getDeltaTime() * 400;
+				posicaoMoedaHorizontal -= Gdx.graphics.getDeltaTime()*400;
+				posicaoMoedaHorizontal2 -= Gdx.graphics.getDeltaTime()*399;
+			}
+			if(pontos>1000)
+			{
+				posicaoCanoHorizontal -= Gdx.graphics.getDeltaTime() * 600;
+				posicaoMoedaHorizontal -= Gdx.graphics.getDeltaTime()*600;
+				posicaoMoedaHorizontal2 -= Gdx.graphics.getDeltaTime()*599;
+			}
 			posicaoMoedaHorizontal -= Gdx.graphics.getDeltaTime()*200;
 			posicaoMoedaHorizontal2 -= Gdx.graphics.getDeltaTime()*199;
 			if (posicaoCanoHorizontal< -canoTopo.getWidth())
@@ -216,7 +249,7 @@ public class MyGdxGame extends ApplicationAdapter {
 				preferencias.putInteger("pontuacaoMaxima",pontuacaoMaxima);
 				preferencias.flush();
 			}
-			posicaoHorizontalPassaro -= Gdx.graphics.getDeltaTime()*-500;
+			posicaoHorizontalPassaro -= Gdx.graphics.getDeltaTime()*-1000;
 			if (toqueTela)
 			{
 				estadoJogo = 0;
@@ -330,6 +363,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	@Override
 	public void dispose () {
+		batch.dispose();
 	}
 
 }
